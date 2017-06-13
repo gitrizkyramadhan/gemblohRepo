@@ -112,10 +112,10 @@
         <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
         
         
-<!--
-        <script src="assets/scripts.js"></script>
+
+        <!--<script src="assets/scripts.js"></script>-->
         <script src="assets/DT_bootstrap.js"></script>
-        -->
+        
         <script>
         $(function() {
             var request = $.ajax({
@@ -123,10 +123,20 @@
             type: "GET",
             dataType: 'json',
             success: function(data){ 
+                
                 $.each( data, function( key, value ) {
                 $('#data').append("<tr>"+"<td>"+value[0]+"</td>"+"<td>"+value[1]+"</td>"+"<td>"+value[2]+"</td>"+"</tr>");
                 });
-                $('#example').DataTable();
+                $('#example').dataTable( {
+                    "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+                    "sPaginationType": "bootstrap",
+                    "oLanguage": {
+                        "sLengthMenu": "_MENU_ records per page"
+                    }
+                } );
+                //$('#example').DataTable({"sPaginationType": "bootstrap"});
+                //var table = $('#example').DataTable();
+                
               },
               error: function(data){
                   //alert(console.log(data));

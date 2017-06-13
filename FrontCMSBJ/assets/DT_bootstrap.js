@@ -149,13 +149,13 @@ if ( $.fn.DataTable.TableTools ) {
 
 /* Table initialisation */
 $(document).ready(function() {
-	$('#example').dataTable( {
+	/*$('#example').dataTable( {
 		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
 		"sPaginationType": "bootstrap",
 		"oLanguage": {
 			"sLengthMenu": "_MENU_ records per page"
 		}
-	} );
+	} );*/
 
 	$('#example2').dataTable( {
 		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
@@ -166,3 +166,16 @@ $(document).ready(function() {
 	} );
 
 } );
+
+function GetURLParameter(sParam){
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+        {
+            return decodeURIComponent(sParameterName[1]);
+        }
+    }
+}
