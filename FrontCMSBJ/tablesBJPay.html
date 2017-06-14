@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js">
-    
+
     <head>
         <title>Admin Home Page</title>
         <!-- Bootstrap -->
@@ -15,7 +15,7 @@
         <![endif]-->
         <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-    
+
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -65,7 +65,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!--/span-->
                 <div class="span9" id="content">
 
@@ -77,17 +77,17 @@
                             </div>
                             <div class="block-content collapse in">
                                 <div class="span12">
-                                    
+
                                     <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
                                         <thead>
                                             <tr>
                                                 <th>Virtual Account</th>
-                                                <th>MSISDN</th>
                                                 <th>Phone Number</th>
+                                                <th>Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody id="data">
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -96,7 +96,7 @@
                         <!-- /block -->
                     </div>
 
-                </div>    
+                </div>
             </div>
             <hr>
             <footer>
@@ -104,28 +104,28 @@
             </footer>
         </div>
         <!--/.fluid-container-->
-        
+
 
         <script src="vendors/jquery-1.9.1.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-        
-        
+
+
 
         <!--<script src="assets/scripts.js"></script>-->
         <script src="assets/DT_bootstrap.js"></script>
-        
+
         <script>
         $(function() {
             var request = $.ajax({
-            url: "http://localhost/getBJPay",
+            url: "http://localhost:8080/getBJPay",
             type: "GET",
             dataType: 'json',
-            success: function(data){ 
-                
+            success: function(data){
+
                 $.each( data, function( key, value ) {
-                $('#data').append("<tr>"+"<td>"+value[0]+"</td>"+"<td>"+value[1]+"</td>"+"<td>"+value[2]+"</td>"+"</tr>");
+                $('#data').append("<tr>"+"<td>"+value[0]+"</td>"+"<td>"+value[2]+"</td>"+"<td>"+value[3]+"</td>"+"</tr>");
                 });
                 $('#example').dataTable( {
                     "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
@@ -136,12 +136,12 @@
                 } );
                 //$('#example').DataTable({"sPaginationType": "bootstrap"});
                 //var table = $('#example').DataTable();
-                
+
               },
               error: function(data){
                   //alert(console.log(data));
               }
-          });    
+          });
         });
         </script>
     </body>

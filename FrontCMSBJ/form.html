@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js">
-    
+
     <head>
         <title>Admin Home Page</title>
         <!-- Bootstrap -->
@@ -15,7 +15,7 @@
         <![endif]-->
         <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-        
+
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -65,19 +65,19 @@
                         </li>
                     </ul>
                 </div>
-                        
+
                 <!--/span-->
                 <div class="span9" id="content">
                     <div class="alert alert-success" id="alert" style="display: none;">
                             <button type="button" class="close" data-dismiss="alert">×</button>
                             <h4>Success</h4>
                             The operation completed successfully
-                    </div>            
+                    </div>
                     <div class="alert alert-error" id="alertErr" style="display: none;">
                             <button type="button" class="close" data-dismiss="alert">×</button>
                             <h4>Error</h4>
                             Please Contact Your Administrator
-                    </div>            
+                    </div>
                     <div class="row-fluid">
                          <!-- block -->
                         <div class="block">
@@ -142,7 +142,7 @@
                         </fieldset>
                     </form>
 
-                    
+
                     <div id="myModal" class="modal hide">
                         <div class="modal-header">
                             <button data-dismiss="modal" class="close" type="button">&times;</button>
@@ -153,7 +153,7 @@
                             <a onClick="#"  class="btn btn-primary btn-large">Send</a>
                         </div>
                     </div>
-                                    
+
                     <!-- END FORM-->
                 </div>
                 </div>
@@ -201,7 +201,7 @@
                 type: "POST",
                 data: $('#form_sample_1').serialize(),
                 dataType: 'json',
-                success: function(data){ 
+                success: function(data){
                     if(data.trim() == 'sukses' ){
                         $('#alert').show();
                         $('#alertErr').hide();
@@ -214,22 +214,22 @@
                   error: function(data){
                       //alert(console.log(data));
                   }
-              });            
+              });
         }
         $(function() {
             var id = GetURLParameter('id');
             $('#alert').hide();
             var request = $.ajax({
-                url: "http://localhost/getCompforUpdt",
+                url: "http://localhost:8080/getCompforUpdt",
                 type: "POST",
                 data: {id : id},
                 dataType: 'json',
-                success: function(data){ 
+                success: function(data){
                     $('#userid').val(data[0][1]);
                     $('#bjtelp').val(data[0][2]);
                   },
                   error: function(data){
-                      //alert(console.log(data));
+                      alert(console.log(data));
                   }
               });
         });

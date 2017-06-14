@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js">
-    
+
     <head>
         <title>Admin Home Page</title>
         <!-- Bootstrap -->
@@ -15,7 +15,7 @@
         <![endif]-->
         <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-    
+
     <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -65,7 +65,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!--/span-->
                 <div class="span9" id="content">
                      <div class="row-fluid">
@@ -90,7 +90,7 @@
                                       </div>
                                       -->
                                    </div>
-                                    
+
                                     <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
                                         <thead>
                                             <tr>
@@ -105,7 +105,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="data">
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -113,7 +113,7 @@
                         </div>
                         <!-- /block -->
                     </div>
-                </div>    
+                </div>
             </div>
             <hr>
             <footer>
@@ -126,20 +126,20 @@
         <script src="vendors/datatables/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-    
+
 
         <!--
-        <script src="assets/scripts.js"></script> 
+        <script src="assets/scripts.js"></script>
         -->
         <script src="assets/DT_bootstrap.js"></script>
-        
+
         <script>
         $(function() {
           var request = $.ajax({
-            url: "http://localhost/getKomplain",
+            url: "http://localhost:8080/getKomplain",
             type: "GET",
             dataType: 'json',
-            success: function(data){ 
+            success: function(data){
                 $.each( data, function( key, value ) {
                 $('#data').append("<tr>"+"<td><a href='form.html?id="+value[0]+"'>"+value[1]+"</a></td>"+"<td>"+value[2]+"</td>"+"<td>"+value[3]+"</td>"+"<td>"+value[4]+"</td>"+"<td>"+value[5]+"</td>"+"<td>"+value[6]+"</td>"+"<td>"+value[7]+"</td>"+"<td>"+value[8]+"</td>"+"</tr>");
                 });
@@ -150,12 +150,12 @@
                         "sLengthMenu": "_MENU_ records per page"
                     }
                 } );
-                
+
               },
               error: function(data){
                   //alert(console.log(data));
               }
-          });            
+          });
         });
 
         </script>

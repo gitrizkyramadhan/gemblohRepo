@@ -9,7 +9,7 @@ CORS(app)
 
 MYSQL_HOST = "127.0.0.1"
 MYSQL_USER = "root"
-MYSQL_PWD = "root"
+MYSQL_PWD = ""
 MYSQL_DB1 = "bangjoni72"
 MYSQL_DB2 = "bangjoni133"
 
@@ -22,7 +22,7 @@ def hello_world():
 def auth():
     username = request.args.get('Username')
     password = request.args.get('Password')
-    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
     cursor = db_connect.cursor()
     cursor.execute("SELECT * from User where username = " + username + " and password = " + password + "")
     data = cursor.fetchone()
@@ -32,16 +32,23 @@ def auth():
         return 'Login sukses';
 
 
+def default(obj):
+    if isinstance(obj, Decimal):
+        return str(obj)
+    raise TypeError
+
+
 @app.route('/getBJPay', methods=['GET'])
 def getbjp():
-    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
     cur = db_connect.cursor()
     # cur.execute("select * from bjpay_account")
-    cur.execute("select va_no, msisdn, phone_number from bjpay_account")
+    cur.execute("select va_no, msisdn, phone_number, CAST(amount AS CHAR) from bjpay_account")
     data = cur.fetchall()
 
+    print data
     response = app.response_class(
-        response=json.dumps(data),
+        response=json.dumps(data, ensure_ascii=False),
         status=200,
         mimetype='application/json'
     )
@@ -53,7 +60,7 @@ def getbjp():
 def gettransbjp():
     notelp = request.form['notelp']
     print(notelp)
-    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
     cur = db_connect.cursor()
     query = "select id,user_id,va_no from account_statement where va_no = '" + notelp + "'"
     cur.execute(query)
@@ -66,7 +73,7 @@ def gettransbjp():
 def gettransbjp1puls():
     msisdn = request.form['msisdn']
     print(msisdn)
-    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
     cur = db_connect.cursor()
     query = "select dtm,msisdn,result,trxid,partner_trxid,mesg from 1pulsa_pulsa_token where msisdn = '" + msisdn + "'"
     cur.execute(query)
@@ -77,7 +84,7 @@ def gettransbjp1puls():
 
 @app.route('/getKomplain', methods=['GET'])
 def getkomplain():
-    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
     cur = db_connect.cursor()
     query = "select id,ticket_id,user_id,cust_name,contact_phone,bjpay_phone,complaint,pic,bj_desc from complaint"
     cur.execute(query)
@@ -88,7 +95,7 @@ def getkomplain():
 
 @app.route('/getTopup', methods=['GET'])
 def getTopup():
-    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
     cur = db_connect.cursor()
     query = "select msisdn,dtm,va_no,`phone`,paid from bjpay"
     cur.execute(query)
@@ -105,7 +112,7 @@ def updatePicComp():
     bjdesc = request.form['bjdesc']
     telp = request.form['telp']
     try:
-        db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
+        db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
         cur = db_connect.cursor()
         query = "update complaint set service = '" + service + "' , detail = '" + detail + "' , pic = '" + pic + "', bj_desc = '" + bjdesc + "' where bjpay_phone = '" + telp + "'"
         cur.execute(query)
@@ -120,7 +127,7 @@ def updatePicComp():
 def getCompforUpdt():
     kode = request.form['id']
     print(kode)
-    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=8889, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
     cur = db_connect.cursor()
     query = "select id, user_id,bjpay_phone from complaint where id =" + kode
     cur.execute(query)
@@ -129,8 +136,27 @@ def getCompforUpdt():
     return json.dumps(data)
 
 
+@app.route('/getAccountStatement', methods=['POST'])
+def getAccountStatement():
+    kode = request.form['phonenumber']
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
+    cur = db_connect.cursor()
+
+    query = "select id, va_no, msisdn, phone_number, amount, register_date, update_time from bjpay_account where phone_number ='" + kode + "'"
+    cur.execute(query)
+    data = cur.fetchall()
+
+    query_statement = "select id, trx_date, type, amount, description, trx_id from account_statement where va_no ='" + kode + "'"
+    cur.execute(query_statement)
+    data_statement = cur.fetchall()
+
+    account = {'account':data, 'statements':data_statement}
+    print(account)
+    return json.dumps(account)
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=8080)
     app.debug = True
 
 
