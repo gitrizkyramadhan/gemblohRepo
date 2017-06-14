@@ -17,3 +17,5 @@ $(function() {
 	  	$('#sidebar').show('fast');
 	});
 });
+
+var host = 'http://localhost:8080';

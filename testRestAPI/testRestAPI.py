@@ -1,6 +1,7 @@
 from flask import Flask, request, Response, json
 from flask_cors import cross_origin, CORS
 import MySQLdb
+from bot import Bot
 
 
 app = Flask(__name__)
@@ -129,7 +130,7 @@ def getCompforUpdt():
     print(kode)
     db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
     cur = db_connect.cursor()
-    query = "select id, user_id,bjpay_phone from complaint where id =" + kode
+    query = "select id, user_id,bjpay_phone, service, complaint, pic, status, CAST(trx_date AS CHAR) from complaint where id =" + kode
     cur.execute(query)
     data = cur.fetchall()
     print(data)
@@ -138,15 +139,15 @@ def getCompforUpdt():
 
 @app.route('/getAccountStatement', methods=['POST'])
 def getAccountStatement():
-    kode = request.form['phonenumber']
+    kode = request.form['id']
     db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB2)
     cur = db_connect.cursor()
 
-    query = "select id, va_no, msisdn, phone_number, amount, register_date, update_time from bjpay_account where phone_number ='" + kode + "'"
+    query = "select va_no, msisdn, phone_number, CAST(amount AS CHAR), CAST(register_date AS CHAR), CAST(update_time AS CHAR) from bjpay_account where phone_number ='" + kode + "'"
     cur.execute(query)
     data = cur.fetchall()
 
-    query_statement = "select id, trx_date, type, amount, description, trx_id from account_statement where va_no ='" + kode + "'"
+    query_statement = "select id, CAST(trx_date AS CHAR), type, CAST(amount AS CHAR), description, trx_id from account_statement where va_no ='" + kode + "'"
     cur.execute(query_statement)
     data_statement = cur.fetchall()
 
@@ -155,8 +156,22 @@ def getAccountStatement():
     return json.dumps(account)
 
 
+@app.route('/sendMessage', methods=['POST'])
+def sendMessage():
+    kode = request.form['message']
+    lin
+    return json.dumps("sukses")
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
     app.debug = True
+
+    with open('BJCONFIG.txt') as f:
+        content = f.read().splitlines()
+    f.close()
+
+    self.LINE_TOKEN=content[11].split('=')[1]
+    self.linebot = Bot(self.LINE_TOKEN)
 
 

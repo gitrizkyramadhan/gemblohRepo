@@ -95,7 +95,6 @@
                                         <thead>
                                             <tr>
                                                 <th>Ticket ID</th>
-                                                <th width="100px">User ID</th>
                                                 <th >Customer Name</th>
                                                 <th>Contact Phone</th>
                                                 <th>BJPay Phone</th>
@@ -141,7 +140,7 @@
             dataType: 'json',
             success: function(data){
                 $.each( data, function( key, value ) {
-                $('#data').append("<tr>"+"<td><a href='form.html?id="+value[0]+"'>"+value[1]+"</a></td>"+"<td>"+value[2]+"</td>"+"<td>"+value[3]+"</td>"+"<td>"+value[4]+"</td>"+"<td>"+value[5]+"</td>"+"<td>"+value[6]+"</td>"+"<td>"+value[7]+"</td>"+"<td>"+value[8]+"</td>"+"</tr>");
+                $('#data').append("<tr>"+"<td><a href='form.html?id="+value[0]+"'>"+value[1]+"</a></td>"+"<td>"+value[3]+"</td>"+"<td>"+value[4]+"</td>"+"<td>"+value[5]+"</td>"+"<td>"+value[6]+"</td>"+"<td>"+value[7]+"</td>"+"<td>"+value[8]+"</td>"+"</tr>");
                 });
                 $('#example').dataTable( {
                     "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",

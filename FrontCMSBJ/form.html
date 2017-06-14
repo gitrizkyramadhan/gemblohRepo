@@ -107,31 +107,53 @@
                                 <label class="control-label">BJPay Phone<span class="required">*</span></label>
                                 <div class="controls">
                                     <input type="text" id="bjtelp" name="telp" readonly="" ="" data-required="1" class="span6 m-wrap"/>
-                                    <a href="tablesTopup.html" onclick="cekTopup();" target="_blank" id="topup" class="btn btn-primary">Cek Topup</a>
+                                    <a href="formBJPAY.html" onclick="cekTopup();" target="_blank" id="topup" class="btn btn-primary">Cek Account BJPAY</a>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Line ID<span class="required">*</span></label>
+                                <div class="controls">
+                                    <input type="text" readonly name="lineID" id="line-id" class="span6 m-wrap"></textarea>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Services<span class="required">*</span></label>
                                 <div class="controls">
-                                    <input type="text" name="service" data-required="1" class="span6 m-wrap"/>
+                                    <input type="text" id="service" readonly="" name="service" data-required="1" class="span6 m-wrap"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Transaction Date<span class="required">*</span></label>
+                                <div class="controls">
+                                    <input type="text" id="trx-date" readonly="" name="service" data-required="1" class="span6 m-wrap"/>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Details<span class="required">*</span></label>
                                 <div class="controls">
-                                    <textarea name="detail" class="span6 m-wrap"></textarea>
+                                    <textarea name="detail" id="detail" readonly="" class="span6 m-wrap"></textarea>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">PIC<span class="required">*</span></label>
                                 <div class="controls">
-                                    <input type="text" name="pic" data-required="1" class="span6 m-wrap"/>
+                                    <input type="text" name="pic" id="pic" data-required="1" class="span6 m-wrap"/>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Description<span class="required">*</span></label>
+                                <label class="control-label">BJ Notes<span class="required">*</span></label>
                                 <div class="controls">
-                                    <textarea  name="bjdesc" class="span6 m-wrap"></textarea>
+                                    <textarea  name="bjdesc" id="bj-notes" class="span6 m-wrap"></textarea>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Status<span class="required">*</span></label>
+                                <div class="controls">
+                                    <select id="status">
+                                      <option value="0">OPEN</option>
+                                      <option value="1">CLOSED</option>
+                                      <option value="2">ON PROGRESS</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-actions">
@@ -149,8 +171,8 @@
                             <h3>Send Feedback</h3>
                         </div>
                         <div class="modal-body">
-                            <textarea class="input-xlarge textarea" placeholder="Enter text ..." style="width: 510px; height: 200px"></textarea><br />
-                            <a onClick="#"  class="btn btn-primary btn-large">Send</a>
+                            <textarea id="feedback-message" name="feedback-message" class="input-xlarge textarea" placeholder="Enter text ..." style="width: 510px; height: 200px"></textarea><br />
+                            <a onClick="sendFeedback()" class="btn btn-primary btn-large">Send</a>
                         </div>
                     </div>
 
@@ -197,9 +219,9 @@
             }
         function updateData(){
             var request = $.ajax({
-                url: "http://localhost/updatePicComp",
+                url: host+"/updatePicComp",
                 type: "POST",
-                data: $('#form_sample_1').serialize(),
+                data: {message:$('#feedback-message').serialize()},
                 dataType: 'json',
                 success: function(data){
                     if(data.trim() == 'sukses' ){
@@ -216,17 +238,44 @@
                   }
               });
         }
+        function sendFeedback(){
+          var request = $.ajax({
+              url: host+"/updatePicComp",
+              type: "POST",
+              data: $('#form_sample_1').serialize(),
+              dataType: 'json',
+              success: function(data){
+                  if(data.trim() == 'sukses' ){
+                      $('#alert').show();
+                      $('#alertErr').hide();
+                  }else{
+                      $('#alert').hide();
+                      $('#alertErr').show();
+                  }
+                  return false;
+                },
+                error: function(data){
+                    //alert(console.log(data));
+                }
+            });
+        }
         $(function() {
             var id = GetURLParameter('id');
             $('#alert').hide();
             var request = $.ajax({
-                url: "http://localhost:8080/getCompforUpdt",
+                url: host+"/getCompforUpdt",
                 type: "POST",
                 data: {id : id},
                 dataType: 'json',
                 success: function(data){
+                  console.log(data);
                     $('#userid').val(data[0][1]);
                     $('#bjtelp').val(data[0][2]);
+                    $('#service').val(data[0][3]);
+                    $('#detail').val(data[0][4]);
+                    $('#pic').val(data[0][5]);
+                    $('#status').val(data[0][6]);
+                    $('#trx-date').val(data[0][7]);
                   },
                   error: function(data){
                       alert(console.log(data));
