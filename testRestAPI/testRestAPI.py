@@ -14,6 +14,8 @@ MYSQL_PWD = ""
 MYSQL_DB1 = "bangjoni72"
 MYSQL_DB2 = "bangjoni133"
 
+linebot = None
+
 @app.route('/')
 def hello_world():
     return 'Hello, youre access Rest Python'
@@ -158,20 +160,35 @@ def getAccountStatement():
 
 @app.route('/sendMessage', methods=['POST'])
 def sendMessage():
-    kode = request.form['message']
-    lin
+    message = request.form['message']
+    msisdn = request.form['msisdn']
+    print linebot
+    linebot.send_text_message(msisdn, message)
     return json.dumps("sukses")
+
+@app.route('/getTopupDetail', methods=['GET'])
+def getTopupDetail():
+    msisdn = request.args.get('msisdn')
+    phone = request.args.get('phone')
+    db_connect = MySQLdb.connect(host=MYSQL_HOST, port=3306, user=MYSQL_USER, passwd=MYSQL_PWD, db=MYSQL_DB1)
+    cur = db_connect.cursor()
+    query = "select msisdn,CONVERT(CONVERT(dtm,DATETIME),CHAR),va_no,`phone`,paid, CONVERT(amount, CHAR), bank_type from bjpay where msisdn = '%s' or phone_number = '%s'" % (msisdn, phone)
+    cur.execute(query)
+    data = cur.fetchall()
+    print(data)
+    return json.dumps(data)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-    app.debug = True
-
     with open('BJCONFIG.txt') as f:
         content = f.read().splitlines()
     f.close()
 
-    self.LINE_TOKEN=content[11].split('=')[1]
-    self.linebot = Bot(self.LINE_TOKEN)
+    LINE_TOKEN=content[11].split('=')[1]
+    linebot = Bot(LINE_TOKEN)
+
+    app.run(host='0.0.0.0', port=8080)
+    app.debug = True
+
 
 

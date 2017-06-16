@@ -125,7 +125,7 @@
             success: function(data){
 
                 $.each( data, function( key, value ) {
-                $('#data').append("<tr>"+"<td>"+value[0]+"</td>"+"<td><a href='formBJPAY.html?id="+value[2]+"'>"+value[2]+"</a></td>"+"<td>"+value[3]+"</td>"+"</tr>");
+                $('#data').append("<tr>"+"<td>"+value[0]+"</td>"+"<td><a href='formBJPAY.html?id="+value[2]+"&msisdn="+value[1]+"'>"+value[2]+"</a></td>"+"<td>"+value[3]+"</td>"+"</tr>");
                 });
                 $('#example').dataTable( {
                     "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",

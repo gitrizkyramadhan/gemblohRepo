@@ -240,9 +240,9 @@
         }
         function sendFeedback(){
           var request = $.ajax({
-              url: host+"/updatePicComp",
+              url: host+"/sendMessage",
               type: "POST",
-              data: $('#form_sample_1').serialize(),
+              data: {'message' : $('#feedback-message').val(), 'msisdn' : $('#userid').val()},
               dataType: 'json',
               success: function(data){
                   if(data.trim() == 'sukses' ){
